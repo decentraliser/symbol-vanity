@@ -32,7 +32,9 @@
   "homepage": "https://github.com/decentraliser/symbol-vanity-address#readme",
   "dependencies": {
     "clime": "^0.5.10",
-    "rxjs": "^6.5.4"
+    "rxjs": "^6.5.4",
+    "symbol-hd-wallets": "^0.9.2",
+    "symbol-sdk": "^0.17.3"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
