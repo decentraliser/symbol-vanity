@@ -1,0 +1,50 @@
+{
+  "name": "symbol-vanity-address",
+  "version": "0.0.0",
+  "description": "Symbol vanity addresses generator",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf build/ && tsc",
+    "dev": "nodemon --config \"./nodemon-config.json\"/",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "jest --forceExit --coverage --verbose --colors --detectOpenHandles"
+  },
+  "bin": {
+    "symbol-vanity": "./bin/symbol-vanity"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decentraliser/symbol-vanity-address.git"
+  },
+  "keywords": [
+    "symbol",
+    "nem",
+    "vanity",
+    "address",
+    "crypto",
+    "blockchain"
+  ],
+  "author": "decentraliser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/decentraliser/symbol-vanity-address/issues"
+  },
+  "homepage": "https://github.com/decentraliser/symbol-vanity-address#readme",
+  "dependencies": {
+    "clime": "^0.5.10",
+    "rxjs": "^6.5.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.1",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0",
+    "jest-junit": "^10.0.0",
+    "nodemon": "^2.0.2",
+    "ts-jest": "^25.2.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  }
+}
