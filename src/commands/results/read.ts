@@ -81,7 +81,7 @@ export default class extends Command {
       {
         type: 'confirm',
         name: 'delete',
-        message: 'Do you want to delete this file',
+        message: 'Do you want to delete this file?',
         initial: false,
       },
     ]
