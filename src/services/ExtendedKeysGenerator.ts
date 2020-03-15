@@ -16,8 +16,7 @@ export class ExtendedKeysGenerator {
   }
 
   public kill(): void {
-    this.extendedKeys$.complete()
-    this.routineController.next(false)
+    // @TODO
   }
 
   private constructor() {
@@ -34,6 +33,7 @@ export class ExtendedKeysGenerator {
           return
         }
 
+        // @TODO: Use a generator to enable killing the process
         while (continueRoutine) {
           const mnemonic = MnemonicPassPhrase.createRandom()
           const extendedKey = ExtendedKey.createFromSeed(mnemonic.toSeed().toString('hex'))

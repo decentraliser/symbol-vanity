@@ -61,9 +61,11 @@ export default class extends Command {
 
         // @TODO: print time
         count += 1
-        if (count === 1)  console.info('The generator started')
-        if (count % 500 === 0) console.info(`${count} derivations performed`)
-        
+        if (count === 1) console.info(`
+          The generator started
+          press CTRL+C to stop the process
+        `)
+        if (count % 100 === 0) console.info(`${count} derivations performed`)
 
         // get addresses from the extended key
         const addresses = paths
@@ -93,14 +95,6 @@ export default class extends Command {
       (error) => console.error(error)
     )
 
-
-
     extendedKeysGenerator.start()
-          // @TODO: print time
-
-    // start the generator
-    // @TODO: enable timeout
-    // setTimeout(() => {
-    // }, 2000);
   }
 }
