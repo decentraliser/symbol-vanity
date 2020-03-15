@@ -2,8 +2,9 @@
   "name": "symbol-vanity",
   "version": "0.0.1",
   "description": "Symbol vanity addresses generator",
-  "main": "index.js",
+  "main": "build/cli.js",
   "scripts": {
+    "prepare": "rm -rf build/ && tsc",
     "build": "rm -rf build/ && tsc",
     "dev": "nodemon --config \"./nodemon-config.json\"/",
     "lint": "eslint . --ext .ts,.tsx",
