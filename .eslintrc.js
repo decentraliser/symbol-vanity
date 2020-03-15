@@ -14,13 +14,14 @@ module.exports = {
     "no-console": [
       "error",
       {
-        allow: ["info", "error"]
+        allow: ["info", "error", "table"]
       }
     ],
     "import/prefer-default-export": "off",
     semi: [2, "never"],
     "linebreak-style": 0,
-    "import/extensions": ["never"]
+    "import/extensions": 0,
+    "import/no-unresolved": 0,
   },
   overrides: [
     {

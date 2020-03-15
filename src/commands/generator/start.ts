@@ -23,19 +23,19 @@
  * SOFTWARE.
  */
 // external
-import {command, metadata, Command} from 'clime'
-import {Wallet} from 'symbol-hd-wallets'
-import {NetworkType} from 'symbol-sdk'
+import { command, metadata, Command } from 'clime'
+import { Wallet } from 'symbol-hd-wallets'
+import { NetworkType } from 'symbol-sdk'
 
 // internal
-import {ExtendedKeysGenerator} from '../../services/ExtendedKeysGenerator'
-import {Classifier} from '../../services/Classifier'
-import {File} from '../../services/File'
-import {WordFinder} from '../../services/WordFinder'
-import {Match} from '../../model/Match'
+import { ExtendedKeysGenerator } from '../../services/ExtendedKeysGenerator'
+import { Classifier } from '../../services/Classifier'
+import { File } from '../../services/File'
+import { WordFinder } from '../../services/WordFinder'
+import { Match } from '../../model/Match'
 import derivationPaths from '../../assets/paths.json'
 
-const {paths} = derivationPaths
+const { paths } = derivationPaths
 
 // @TODO: Network type as option
 @command({
@@ -48,7 +48,7 @@ export default class extends Command {
 
     // instantiate the word finder
     const wordFinder = WordFinder.create()
-    console.info(`Looking for:`)
+    console.info('Looking for:')
     console.table(wordFinder.wordList)
 
     // instantiate extended keys generator
@@ -57,14 +57,15 @@ export default class extends Command {
     // subscribe to extended key stream
 
     extendedKeysGenerator.extendedKeys$.subscribe(
-      ({extendedKey, mnemonic}) => {
-
+      ({ extendedKey, mnemonic }) => {
         // @TODO: print time
         count += 1
-        if (count === 1) console.info(`
+        if (count === 1) {
+          console.info(`
           The generator started
           press CTRL+C to stop the process
         `)
+        }
         if (count % 100 === 0) console.info(`${count} derivations performed`)
 
         // get addresses from the extended key
@@ -73,7 +74,7 @@ export default class extends Command {
           .map((wallet) => wallet.getAccount(NetworkType.TEST_NET).address)
 
         // get matches
-        const matches: Match[] = wordFinder.getMatches(addresses.map(address => address.plain()))
+        const matches: Match[] = wordFinder.getMatches(addresses.map((address) => address.plain()))
         if (!matches.length) return
 
         // get matches vanity types and store files
@@ -81,7 +82,7 @@ export default class extends Command {
           const vanityType = Classifier.getVanityType(match)
 
           console.info('New match!')
-          console.table({...match, vanityType})
+          console.table({ ...match, vanityType })
 
           File.store(
             extendedKey,
@@ -92,7 +93,7 @@ export default class extends Command {
           )
         })
       },
-      (error) => console.error(error)
+      (error) => console.error(error),
     )
 
     extendedKeysGenerator.start()

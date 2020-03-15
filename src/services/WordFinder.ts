@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import {Match} from '../model/Match'
+import { Match } from '../model/Match'
 import words from '../assets/wordList.json'
 
 const { wordList } = words

@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 import { Match } from '../model/Match'
+
 const ADDRESS_LENGTH = 40
 
 /**

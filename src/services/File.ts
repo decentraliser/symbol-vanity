@@ -28,6 +28,7 @@ import { Address } from 'symbol-sdk'
 
 export class File {
   private filePath: string
+
   private fileContent: string
 
   /**
