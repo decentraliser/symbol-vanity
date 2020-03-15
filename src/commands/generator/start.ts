@@ -30,10 +30,10 @@ import { NetworkType } from 'symbol-sdk'
 // internal
 import { ExtendedKeysGenerator } from '../../services/ExtendedKeysGenerator'
 import { Classifier } from '../../services/Classifier'
-import { Files } from '../../services/Files'
+import { Results } from '../../services/Results'
 import { WordFinder } from '../../services/WordFinder'
 import { Match } from '../../model/Match'
-import derivationPaths from '../../assets/paths.json'
+import derivationPaths from '../../../assets/paths.json'
 
 const { paths } = derivationPaths
 
@@ -48,6 +48,15 @@ export default class extends Command {
 
     // instantiate the word finder
     const wordFinder = WordFinder.create()
+
+    // return if word list is empty
+    if (!wordFinder.wordList.length) {
+      console.info('There are no word to search!')
+      console.info('Add some by running the following command:')
+      console.info('symbol-vanity words add')
+      return
+    }
+
     console.info('Looking for:')
     console.table(wordFinder.wordList)
 
@@ -55,7 +64,6 @@ export default class extends Command {
     const extendedKeysGenerator = ExtendedKeysGenerator.create()
 
     // subscribe to extended key stream
-
     extendedKeysGenerator.extendedKeys$.subscribe(
       ({ extendedKey, mnemonic }) => {
         // @TODO: print time
@@ -84,12 +92,12 @@ export default class extends Command {
           console.info('New match!')
           console.table({ ...match, vanityType })
 
-          Files.store(
+          Results.store(
             extendedKey,
             mnemonic,
             addresses,
             match.word,
-            `${vanityType}`,
+            vanityType,
           )
         })
       },

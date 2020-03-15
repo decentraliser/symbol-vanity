@@ -21,17 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import fs from 'fs'
-import path from 'path'
 import { ExtendedKey, MnemonicPassPhrase } from 'symbol-hd-wallets'
 import { Address } from 'symbol-sdk'
+import { FilesRepository } from '../repositories/FilesRepository'
+import { folders } from '../config/folders'
+import { VanityType } from './Classifier'
 
-const BASE_PATH = '../../../'
-const RESULTS_FOLDER_NAME = 'results'
-
-export class Files {
-  private filePath: string
-
+export class Results {
   private fileContent: string
 
   /**
@@ -41,26 +37,20 @@ export class Files {
    * @param {MnemonicPassPhrase} mnemonic
    * @param {Address[]} addresses
    * @param {string} searchedWord
-   * @param {string} [chunkNumber]
+   * @param {chunkNumber} [vanityType]
    */
   public static store(
     extendedKey: ExtendedKey,
     mnemonic: MnemonicPassPhrase,
     addresses: Address[],
     searchedWord: string,
-    chunkNumber?: string,
+    vanityType: VanityType,
   ): void {
     try {
-      new Files(extendedKey, mnemonic, addresses, searchedWord, chunkNumber).save()
+      new Results(extendedKey, mnemonic, addresses, searchedWord, vanityType).save()
     } catch (error) {
       console.error(error)
     }
-  }
-
-  public static listResultFiles(): string[] {
-    return fs.readdirSync(path.join(__dirname, `${BASE_PATH}${RESULTS_FOLDER_NAME}`))
-      .filter((name) => name !== '.gitkeep')
-      .map((name) => name.replace('.json', ''))
   }
 
   private constructor(
@@ -68,18 +58,15 @@ export class Files {
     private mnemonic: MnemonicPassPhrase,
     private addresses: Address[],
     private searchedWord: string,
-    private chunkNumber?: string,
+    private vanityType: VanityType,
   ) {
-    this.filePath = this.getFilePath()
     this.fileContent = this.getFileContent()
   }
 
-  private getFilePath(): string {
+  private getFileName(): string {
     const fileNonce = this.extendedKey.getPublicKey().toString('hex')
-    return path.join(
-      __dirname,
-      `${BASE_PATH}${RESULTS_FOLDER_NAME}/${this.searchedWord.toUpperCase()}-${this.chunkNumber || ''}-${fileNonce}.json`,
-    )
+    const classification = this.vanityType.toString().toUpperCase()
+    return `${this.searchedWord.toUpperCase()}-${classification}-${fileNonce}`
   }
 
   private getFileContent(): string {
@@ -90,6 +77,6 @@ export class Files {
   }
 
   private save(): void {
-    fs.writeFileSync(this.filePath, this.fileContent)
+    FilesRepository.save(folders.results, this.fileContent, this.getFileName())
   }
 }

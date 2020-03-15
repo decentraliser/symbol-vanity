@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-unresolved */
 /*
  * MIT License
  *
@@ -23,27 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import chalk from 'chalk'
-
-const pkg = require('../../../package.json')
-
-console.info(chalk.blue(`Symbol vanity v${pkg.version}`))
-
-export const subcommands = [
-  {
-    name: 'generator',
-    brief: 'Vanity address generator controls',
-  },
-  {
-    name: 'words',
-    brief: 'Manage the words you are looking for',
-  },
-  {
-    name: 'results',
-    brief: 'The vanity addresses found by the generator',
-  },
-  {
-    name: 'paths',
-    brief: 'See the derivation paths used to generate the addresses',
-  },
-]
+export const params = {
+  ADDRESS_LENGTH: 40,
+  MIN_WORD_LENGTH: 3,
+}

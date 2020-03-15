@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 import { Match } from '../model/Match'
-import words from '../assets/wordList.json'
+import { WordsRepository } from '../repositories/WordsRepository'
 
-const { wordList } = words
+const wordList = WordsRepository.getWordList()
 
 export class WordFinder {
   public readonly wordList: string[]

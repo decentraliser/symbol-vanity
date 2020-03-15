@@ -26,7 +26,7 @@
 import { command, metadata, Command } from 'clime'
 
 // internal
-import derivationPaths from '../../assets/paths.json'
+import derivationPaths from '../../../assets/paths.json'
 
 const { paths } = derivationPaths
 

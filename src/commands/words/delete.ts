@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-unresolved */
+/* eslint-disable class-methods-use-this */
 /*
  * MIT License
  *
@@ -23,27 +22,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import chalk from 'chalk'
+// external
+import { command, metadata, Command } from 'clime'
+import prompts from 'prompts'
 
-const pkg = require('../../../package.json')
+// internal
+import { WordsRepository } from '../../repositories/WordsRepository'
 
-console.info(chalk.blue(`Symbol vanity v${pkg.version}`))
+@command({
+  description: 'Delete a word from the list',
+})
+export default class extends Command {
+ @metadata
+  async execute() {
+    const words = WordsRepository.getWordList()
+    if (!words || !words.length) {
+      console.info('There are no words in the list')
+      return
+    }
 
-export const subcommands = [
-  {
-    name: 'generator',
-    brief: 'Vanity address generator controls',
-  },
-  {
-    name: 'words',
-    brief: 'Manage the words you are looking for',
-  },
-  {
-    name: 'results',
-    brief: 'The vanity addresses found by the generator',
-  },
-  {
-    name: 'paths',
-    brief: 'See the derivation paths used to generate the addresses',
-  },
-]
+    const choices = words.map((word) => ({ title: word, value: word }))
+
+    const questions: any = [
+      {
+        type: 'multiselect',
+        name: 'wordToDelete',
+        message: 'chose a word to delete',
+        choices,
+      },
+    ]
+
+    const response = await prompts(questions)
+    response.wordToDelete.forEach(WordsRepository.deleteByValue)
+  }
+}

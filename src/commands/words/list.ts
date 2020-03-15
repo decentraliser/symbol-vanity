@@ -26,9 +26,13 @@
 import { command, metadata, Command } from 'clime'
 
 // internal
-import words from '../../assets/wordList.json'
+import { FilesRepository } from '../../repositories/FilesRepository'
+import { folders } from '../../config/folders'
 
-const { wordList } = words
+const words = FilesRepository.read(folders.wordList)
+
+
+const wordList = words && words.wordList ? words.wordList : []
 
 @command({
   description: 'List the searched words',

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-unresolved */
 /*
  * MIT License
  *
@@ -23,27 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import chalk from 'chalk'
+import { Folder } from '../model/Folder'
 
-const pkg = require('../../../package.json')
-
-console.info(chalk.blue(`Symbol vanity v${pkg.version}`))
-
-export const subcommands = [
-  {
-    name: 'generator',
-    brief: 'Vanity address generator controls',
+export const folders: Record<string, Folder> = {
+  wordList: {
+    name: 'wordList',
+    path: 'assets/',
   },
-  {
-    name: 'words',
-    brief: 'Manage the words you are looking for',
-  },
-  {
+  results: {
     name: 'results',
-    brief: 'The vanity addresses found by the generator',
+    path: 'results/',
   },
-  {
-    name: 'paths',
-    brief: 'See the derivation paths used to generate the addresses',
-  },
-]
+}

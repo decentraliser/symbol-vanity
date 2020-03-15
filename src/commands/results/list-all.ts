@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-unresolved */
+/* eslint-disable class-methods-use-this */
 /*
  * MIT License
  *
@@ -23,27 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import chalk from 'chalk'
+// external
+import { command, metadata, Command } from 'clime'
 
-const pkg = require('../../../package.json')
+// internal
+import { ResultsRepository } from '../../repositories/ResultsRepository'
 
-console.info(chalk.blue(`Symbol vanity v${pkg.version}`))
-
-export const subcommands = [
-  {
-    name: 'generator',
-    brief: 'Vanity address generator controls',
-  },
-  {
-    name: 'words',
-    brief: 'Manage the words you are looking for',
-  },
-  {
-    name: 'results',
-    brief: 'The vanity addresses found by the generator',
-  },
-  {
-    name: 'paths',
-    brief: 'See the derivation paths used to generate the addresses',
-  },
-]
+@command({
+  description: 'List all the vanity addresses files',
+})
+export default class extends Command {
+  @metadata
+  execute() {
+    console.table(ResultsRepository.listResultFiles())
+  }
+}

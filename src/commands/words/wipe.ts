@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-unresolved */
+/* eslint-disable class-methods-use-this */
 /*
  * MIT License
  *
@@ -23,27 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import chalk from 'chalk'
+// external
+import { command, metadata, Command } from 'clime'
+import prompts from 'prompts'
 
-const pkg = require('../../../package.json')
+// internal
+import { WordsRepository } from '../../repositories/WordsRepository'
 
-console.info(chalk.blue(`Symbol vanity v${pkg.version}`))
+@command({
+  description: 'Clears the word list content',
+})
+export default class extends Command {
+ @metadata
+  async execute() {
+    const questions: any = [
+      {
+        type: 'confirm',
+        name: 'confirmed',
+        message: 'Do you really want to delete the existing word list?',
+        initial: false,
+      },
+    ]
 
-export const subcommands = [
-  {
-    name: 'generator',
-    brief: 'Vanity address generator controls',
-  },
-  {
-    name: 'words',
-    brief: 'Manage the words you are looking for',
-  },
-  {
-    name: 'results',
-    brief: 'The vanity addresses found by the generator',
-  },
-  {
-    name: 'paths',
-    brief: 'See the derivation paths used to generate the addresses',
-  },
-]
+    const response = await prompts(questions)
+    if (response.confirmed) WordsRepository.wipe()
+  }
+}

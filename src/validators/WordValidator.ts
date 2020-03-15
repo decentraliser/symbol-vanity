@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 /*
  * MIT License
  *
@@ -22,19 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-// external
-import { command, metadata, Command } from 'clime'
+import { params } from '../config/params'
 
-// internal
-import { Files } from '../../services/Files'
+const { ADDRESS_LENGTH, MIN_WORD_LENGTH } = params
+export class WordValidator {
+  public static validate(word: string) {
+    if (word.length < MIN_WORD_LENGTH) {
+      return `Words should be at least ${MIN_WORD_LENGTH} long`
+    }
 
-// @TODO: Network type as option
-@command({
-  description: 'List the found vanity addresses files',
-})
-export default class extends Command {
-  @metadata
-  execute() {
-    console.table(Files.listResultFiles())
+    if (word.length > ADDRESS_LENGTH) {
+      return `Words should not be more than ${ADDRESS_LENGTH} long`
+    }
+
+    return true
   }
 }
