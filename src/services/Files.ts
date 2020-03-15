@@ -26,7 +26,10 @@ import path from 'path'
 import { ExtendedKey, MnemonicPassPhrase } from 'symbol-hd-wallets'
 import { Address } from 'symbol-sdk'
 
-export class File {
+const BASE_PATH = '../../../'
+const RESULTS_FOLDER_NAME = 'results'
+
+export class Files {
   private filePath: string
 
   private fileContent: string
@@ -48,10 +51,16 @@ export class File {
     chunkNumber?: string,
   ): void {
     try {
-      new File(extendedKey, mnemonic, addresses, searchedWord, chunkNumber).save()
+      new Files(extendedKey, mnemonic, addresses, searchedWord, chunkNumber).save()
     } catch (error) {
       console.error(error)
     }
+  }
+
+  public static listResultFiles(): string[] {
+    return fs.readdirSync(path.join(__dirname, `${BASE_PATH}${RESULTS_FOLDER_NAME}`))
+      .filter((name) => name !== '.gitkeep')
+      .map((name) => name.replace('.json', ''))
   }
 
   private constructor(
@@ -69,7 +78,7 @@ export class File {
     const fileNonce = this.extendedKey.getPublicKey().toString('hex')
     return path.join(
       __dirname,
-      `../../../results/${this.searchedWord.toUpperCase()}-${this.chunkNumber || ''}-${fileNonce}.json`,
+      `${BASE_PATH}${RESULTS_FOLDER_NAME}/${this.searchedWord.toUpperCase()}-${this.chunkNumber || ''}-${fileNonce}.json`,
     )
   }
 

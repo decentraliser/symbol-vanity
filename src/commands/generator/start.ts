@@ -30,7 +30,7 @@ import { NetworkType } from 'symbol-sdk'
 // internal
 import { ExtendedKeysGenerator } from '../../services/ExtendedKeysGenerator'
 import { Classifier } from '../../services/Classifier'
-import { File } from '../../services/File'
+import { Files } from '../../services/Files'
 import { WordFinder } from '../../services/WordFinder'
 import { Match } from '../../model/Match'
 import derivationPaths from '../../assets/paths.json'
@@ -84,7 +84,7 @@ export default class extends Command {
           console.info('New match!')
           console.table({ ...match, vanityType })
 
-          File.store(
+          Files.store(
             extendedKey,
             mnemonic,
             addresses,
