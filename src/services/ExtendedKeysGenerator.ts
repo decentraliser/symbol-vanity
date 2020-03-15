@@ -1,13 +1,14 @@
 // external
-import {Subject} from 'rxjs'
-import {startWith} from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { startWith } from 'rxjs/operators'
 
 // internal
-import {ExtendedKeysStream} from '../model/ExtendedKeysStream'
-import {MnemonicPassPhrase, ExtendedKey, Network} from 'symbol-hd-wallets'
+import { MnemonicPassPhrase, ExtendedKey } from 'symbol-hd-wallets'
+import { ExtendedKeysStream } from '../model/ExtendedKeysStream'
 
 export class ExtendedKeysGenerator {
   private routineController: Subject<boolean>
+
   public extendedKeys$: ExtendedKeysStream
 
   public static create(): ExtendedKeysGenerator {
@@ -27,16 +28,16 @@ export class ExtendedKeysGenerator {
   public start(): void {
     this.routineController
       .pipe(startWith(true))
-      .subscribe(async continueRoutine => {
+      .subscribe(async (continueRoutine) => {
         if (!continueRoutine) {
           this.kill()
           return
         }
 
-        while(continueRoutine) {
+        while (continueRoutine) {
           const mnemonic = MnemonicPassPhrase.createRandom()
           const extendedKey = ExtendedKey.createFromSeed(mnemonic.toSeed().toString('hex'))
-          this.extendedKeys$.next({mnemonic, extendedKey})
+          this.extendedKeys$.next({ mnemonic, extendedKey })
         }
       })
   }

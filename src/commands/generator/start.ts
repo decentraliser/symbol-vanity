@@ -1,18 +1,19 @@
+/* eslint-disable class-methods-use-this */
 /*
  * MIT License
- * 
+ *
  * Copyright (c) 2020 Decentraliser
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,37 +31,11 @@ import {NetworkType} from 'symbol-sdk'
 import {ExtendedKeysGenerator} from '../../services/ExtendedKeysGenerator'
 import {Classifier} from '../../services/Classifier'
 import {File} from '../../services/File'
+import {WordFinder} from '../../services/WordFinder'
+import {Match} from '../../model/Match'
+import derivationPaths from '../../assets/paths.json'
 
-// @TODO: Move out
-const paths = [
-  'm/44\'/4343\'/0\'/0\'/0\'',
-  'm/44\'/4343\'/1\'/0\'/0\'',
-  'm/44\'/4343\'/2\'/0\'/0\'',
-  'm/44\'/4343\'/3\'/0\'/0\'',
-  'm/44\'/4343\'/4\'/0\'/0\'',
-  'm/44\'/4343\'/5\'/0\'/0\'',
-  'm/44\'/4343\'/6\'/0\'/0\'',
-  'm/44\'/4343\'/7\'/0\'/0\'',
-  'm/44\'/4343\'/8\'/0\'/0\'',
-  'm/44\'/4343\'/9\'/0\'/0\'',
-]
-
-// @TODO: CRUD
-const searchedWords = [
-  'bitcoin',
-  'bloody-rookie',
-  'bloody',
-  'decent',
-  'decentraliser',
-  'gimre',
-  'jaguar',
-  'nemesis',
-  'rookie',
-  'satoshi',
-  'shark',
-  'sharkito',
-  'symbol',
-]
+const {paths} = derivationPaths
 
 // @TODO: Network type as option
 @command({
@@ -69,43 +44,63 @@ const searchedWords = [
 export default class extends Command {
   @metadata
   execute() {
+    let count = 0
+
+    // instantiate the word finder
+    const wordFinder = WordFinder.create()
+    console.info(`Looking for:`)
+    console.table(wordFinder.wordList)
+
+    // instantiate extended keys generator
     const extendedKeysGenerator = ExtendedKeysGenerator.create()
 
-    let count = 0
+    // subscribe to extended key stream
+
     extendedKeysGenerator.extendedKeys$.subscribe(
-
       ({extendedKey, mnemonic}) => {
-        const wallets = paths.map(path => new Wallet(extendedKey.derivePath(path)))
-        const addresses = wallets.map(w => w.getAccount(NetworkType.TEST_NET).address)
 
-        addresses.forEach(address => {
-          const plainAddress = address.plain().toLowerCase()
-
-          searchedWords.forEach(word => {
-            if (plainAddress.indexOf(word) > -1) {
-              const chunkNumber = Classifier.getChunkNumber(address, word)
-              
-              if (chunkNumber === '') return // @TODO: make it optional
-              
-              console.info(`Found a ${word} in chunk ${chunkNumber}`)
-              
-              File.store(
-                extendedKey,
-                mnemonic,
-                addresses,
-                word,
-                chunkNumber,
-              )
-            }
-          })
-        })
-
+        // @TODO: print time
         count += 1
-        if (count % 500 === 0) {
-          console.info(`${count} derivations performed`)
-        }
-      })
+        if (count === 1)  console.info('The generator started')
+        if (count % 500 === 0) console.info(`${count} derivations performed`)
+        
+
+        // get addresses from the extended key
+        const addresses = paths
+          .map((path) => new Wallet(extendedKey.derivePath(path)))
+          .map((wallet) => wallet.getAccount(NetworkType.TEST_NET).address)
+
+        // get matches
+        const matches: Match[] = wordFinder.getMatches(addresses.map(address => address.plain()))
+        if (!matches.length) return
+
+        // get matches vanity types and store files
+        matches.forEach((match: Match) => {
+          const vanityType = Classifier.getVanityType(match)
+
+          console.info('New match!')
+          console.table({...match, vanityType})
+
+          File.store(
+            extendedKey,
+            mnemonic,
+            addresses,
+            match.word,
+            `${vanityType}`,
+          )
+        })
+      },
+      (error) => console.error(error)
+    )
+
+
 
     extendedKeysGenerator.start()
+          // @TODO: print time
+
+    // start the generator
+    // @TODO: enable timeout
+    // setTimeout(() => {
+    // }, 2000);
   }
 }

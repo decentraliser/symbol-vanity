@@ -7,6 +7,7 @@
     "build": "rm -rf build/ && tsc",
     "dev": "nodemon --config \"./nodemon-config.json\"/",
     "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "test": "jest --forceExit --coverage --verbose --colors --detectOpenHandles"
   },
   "bin": {
@@ -42,6 +43,10 @@
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-airbnb-typescript": "^7.0.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.20.1",
     "jest": "^25.1.0",
     "jest-junit": "^10.0.0",
     "nodemon": "^2.0.2",

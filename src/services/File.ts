@@ -1,8 +1,8 @@
 // external
 import fs from 'fs'
 import path from 'path'
-import {ExtendedKey, MnemonicPassPhrase} from 'symbol-hd-wallets'
-import {Address} from 'symbol-sdk'
+import { ExtendedKey, MnemonicPassPhrase } from 'symbol-hd-wallets'
+import { Address } from 'symbol-sdk'
 
 export class File {
   private filePath: string
@@ -46,14 +46,14 @@ export class File {
     const fileNonce = this.extendedKey.getPublicKey().toString('hex')
     return path.join(
       __dirname,
-      `../../../results/${this.searchedWord.toUpperCase()}-${this.chunkNumber || ''}-${fileNonce}.json`
+      `../../../results/${this.searchedWord.toUpperCase()}-${this.chunkNumber || ''}-${fileNonce}.json`,
     )
   }
 
   private getFileContent(): string {
     return JSON.stringify({
       mnemonic: this.mnemonic.plain,
-      addresses: this.addresses.map(a => a.pretty()),
+      addresses: this.addresses.map((a) => a.pretty()),
     })
   }
 
