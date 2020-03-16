@@ -26,6 +26,7 @@
 import { command, metadata, Command } from 'clime'
 import { Wallet } from 'symbol-hd-wallets'
 import { NetworkType } from 'symbol-sdk'
+import prompts from 'prompts'
 
 // internal
 import { ExtendedKeysGenerator } from '../../services/ExtendedKeysGenerator'
@@ -43,7 +44,22 @@ const { paths } = derivationPaths
 })
 export default class extends Command {
   @metadata
-  execute() {
+  async execute() {
+    const choices = Object.keys(NetworkType)
+      .filter((key) => Number.isNaN(parseFloat(key)))
+      .map((word) => ({ title: word, value: word }))
+
+    const questions: any = [
+      {
+        type: 'select',
+        name: 'networkType',
+        message: 'Chose a network type',
+        choices,
+      },
+    ]
+
+    const response = await prompts(questions)
+
     let count = 0
 
     // instantiate the word finder
@@ -79,7 +95,7 @@ export default class extends Command {
         // get addresses from the extended key
         const addresses = paths
           .map((path) => new Wallet(extendedKey.derivePath(path)))
-          .map((wallet) => wallet.getAccount(NetworkType.TEST_NET).address)
+          .map((wallet) => wallet.getAccount(NetworkType[response.networkType] as any).address)
 
         // get matches
         const matches: Match[] = wordFinder.getMatches(addresses.map((address) => address.plain()))
