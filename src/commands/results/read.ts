@@ -47,7 +47,7 @@ export default class extends Command {
       {
         type: 'select',
         name: 'chosenWord',
-        message: 'chose a word or all to see the available vanity',
+        message: 'chose a word or all to see the available vanity addresses',
         choices: wordChoices,
       },
     ]
