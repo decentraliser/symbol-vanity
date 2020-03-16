@@ -1,6 +1,6 @@
 {
   "name": "symbol-vanity",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Symbol vanity addresses generator",
   "main": "build/cli.js",
   "scripts": {
