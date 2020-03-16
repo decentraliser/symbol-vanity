@@ -10,11 +10,10 @@ node 12
 `npm install -g symbol-vanity`
 
 ## usage
-1. put the words you look for in `src/commands/generator/start.ts/searchedWords`
-2. run `tsc`
-3. run `./bin/symbol-vanity generator start`
-4. found vanity addresses will appear in the `./results` folder
-5. import the mnemonic in `symbol-desktop-wallet` to use your address
+run `symbol-vanity` to see available commands \
+mnemonics that show in results can be imported in `symbol-desktop-wallet`
+![](symbol-vanity.gif)
+
 
 # Concept of Vanity Type
 As a word could be in any position in an address, I introduced a "Vanity Type" classification
