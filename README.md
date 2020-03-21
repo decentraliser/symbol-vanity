@@ -11,7 +11,7 @@ node 12
 
 ## usage
 run `symbol-vanity` to see available commands \
-mnemonics that show in results can be imported in `symbol-desktop-wallet`
+Mnemonics that show in results can be imported in `symbol-desktop-wallet`!
 ![](symbol-vanity.gif)
 
 
