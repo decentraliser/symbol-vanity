@@ -29,7 +29,7 @@ const ADDRESS_LENGTH = 40
 /**
  * Representation of a pretty address chunks
  */
-export type ChunkNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7
+export type ChunkNumber = 2 | 3 | 4 | 5 | 6 | 7
 /**
  * Classifies the way a word shows in an address
  * left: at the left of the address, starting from the first or second letter

@@ -30,13 +30,26 @@ import prompts from 'prompts'
 
 // internal
 import { ExtendedKeysGenerator } from '../../services/ExtendedKeysGenerator'
-import { Classifier } from '../../services/Classifier'
+import { Classifier, VanityType } from '../../services/Classifier'
 import { Results } from '../../services/Results'
 import { WordFinder } from '../../services/WordFinder'
 import { Match } from '../../model/Match'
+
 import derivationPaths from '../../../assets/paths.json'
 
 const { paths } = derivationPaths
+
+const vanityOptions: VanityType[] = [
+  'left',
+  'right',
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  'free',
+]
 
 // @TODO: Network type as option
 @command({
@@ -45,20 +58,30 @@ const { paths } = derivationPaths
 export default class extends Command {
   @metadata
   async execute() {
-    const choices = Object.keys(NetworkType)
+    const networkTypesChoices = Object.keys(NetworkType)
       .filter((key) => Number.isNaN(parseFloat(key)))
       .map((word) => ({ title: word, value: word }))
+
+    const vanityChoices = vanityOptions.map((choice) => ({ title: choice, value: choice }))
 
     const questions: any = [
       {
         type: 'select',
         name: 'networkType',
         message: 'Chose a network type',
-        choices,
+        choices: networkTypesChoices,
+      },
+      {
+        type: 'multiselect',
+        name: 'vanityTypes',
+        message: 'Chose the vanity types you want',
+        choices: vanityChoices,
+        min: 1,
       },
     ]
 
     const response = await prompts(questions)
+    const chosenVanityTypes = response.vanityTypes
 
     let count = 0
 
@@ -73,8 +96,9 @@ export default class extends Command {
       return
     }
 
-    console.info('Looking for:')
+    console.info(`Start searching for ${response.networkType} addresses containing the words:`)
     console.table(wordFinder.wordList)
+    console.info(`Vanity types: ${chosenVanityTypes}`)
 
     // instantiate extended keys generator
     const extendedKeysGenerator = ExtendedKeysGenerator.create()
@@ -104,6 +128,8 @@ export default class extends Command {
         // get matches vanity types and store files
         matches.forEach((match: Match) => {
           const vanityType = Classifier.getVanityType(match)
+
+          if (!chosenVanityTypes.includes(vanityType)) return
 
           console.info('New match!')
           console.table({ ...match, vanityType })
