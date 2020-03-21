@@ -58,6 +58,22 @@ const vanityOptions: VanityType[] = [
 export default class extends Command {
   @metadata
   async execute() {
+    console.info('\n\n')
+    console.info('Vanity type classification: ')
+    console.info('Left: The world starts at the first or second character of the address')
+    console.info('COOL: T*COOL*C-QVTCDN-42YROV-WLMAPB-LD55ZS-756IPJ-PB67')
+    console.info('---')
+    console.info('Right: The word is in the last characters of an address')
+    console.info('SYMBOL: TOPDD-QVTCDN-42YROV-WLMAPB-LD55ZS-756I*SY-MBOL*')
+    console.info('---')
+    console.info('Chunk number: The first letter of the word matches the first letter of a pretty address chunk')
+    console.info('AWESOME in chunk 3: TOPDD-TEWSI-*AWESOM-E*EOMEA-LD55ZS-756ISD-MDWE')
+    console.info('---')
+    console.info('Free: None of the above')
+    console.info('VANITY: TALBSJ-E7WK5S-QL5*VAN-ITY*GYG-RX67AZ-V7GZX2-M7TJ')
+    console.info('\n\n')
+
+
     const networkTypesChoices = Object.keys(NetworkType)
       .filter((key) => Number.isNaN(parseFloat(key)))
       .map((word) => ({ title: word, value: word }))
