@@ -21,32 +21,32 @@ As a word could be in any position in an address, I introduced a "Vanity Type" c
 The world starts at the first or second character of the address
 #### examples:
 word: `TOOL` \
-address: `TOOLCH-QVTCDN-42YROV-WLMAPB-LD55ZS-756IPJ-PB67` \
+address: **TOOL**CH-QVTCDN-42YROV-WLMAPB-LD55ZS-756IPJ-PB67 \
 word: `COOL` \
-address: `TCOOLC-QVTCDN-42YROV-WLMAPB-LD55ZS-756IPJ-PB67`
+address: T**COOL**C-QVTCDN-42YROV-WLMAPB-LD55ZS-756IPJ-PB67
 
 ### Right
 The word is in the last characters of an address
 #### example:
 word: `SYMBOL` \
-address: `TCOOLC-QVTCDN-42YROV-WLMAPB-LD55ZS-756ISY-MBOL`
+address: TOPDD-QVTCDN-42YROV-WLMAPB-LD55ZS-756I**SY-MBOL**
 
 ### Chunk number
 The first letter of the word matches the first letter of a pretty address chunk
 
 #### example of chunk 2:
 word: `THIS` \
-address: `TCOOLC-THISI-AWESOM-EEOMEA-LD55ZS-756ISY-MBOL`
+address: TOPDD-**THIS**I-AWESOM-EEOMEA-LD55ZS-756ISD-MDWE
 
 #### example of chunk 3:
 Searched word: `AWESOME`
-address: `TCOOLC-THISI-AWESOM-EEOMEA-LD55ZS-756ISY-MBOL`
+address: TOPDD-TEWSI-**AWESOM-E**EOMEA-LD55ZS-756ISD-MDWE
 
 ### Free
 Any word match that does not fit one of the above category
 #### example:
 word: `VANITY` \
-address: `TALBSJ-E7WK5S-QL5VAN-ITYGYG-RX67AZ-V7GZX2-M7TJ`
+address: TALBSJ-E7WK5S-QL5**VAN-ITY**GYG-RX67AZ-V7GZX2-M7TJ
 
 # development
 launch hot reload and enjoy! \
