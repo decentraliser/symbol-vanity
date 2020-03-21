@@ -25,14 +25,20 @@ import fs from 'fs'
 import path from 'path'
 import { Folder } from '../model/Folder'
 
+const homedir = require('os').homedir()
+
+const filesdir = 'symbol-vanity-files'
+
 export class FilesRepository {
   public static save(folder: Folder, content: string, fileName?: string): void {
+    this.testFolder(folder)
     const fullPath = fileName ? `${folder.path}/${fileName}` : `${folder.path}/${folder.name}`
     fs.writeFileSync(FilesRepository.getFilePath(fullPath), content)
   }
 
   public static read(folder: Folder, fileName?: string): any | false {
     try {
+      this.testFolder(folder)
       const fullPath = fileName
         ? `${folder.path}/${fileName}`
         : `${folder.path}/${folder.name}`
@@ -46,22 +52,34 @@ export class FilesRepository {
 
   public static readFiles(folder: Folder): string[] | false {
     try {
-      return fs.readdirSync(this.getFolderPath(folder.path))
+      this.testFolder(folder)
+      return fs.readdirSync(this.getPath(folder.path))
     } catch (error) {
       return false
     }
   }
 
   public static getFilePath(pathSuffix: string): string {
-    return `${this.getFolderPath(pathSuffix)}.json`
+    return `${this.getPath(pathSuffix)}.json`
   }
 
-  public static getFolderPath(pathSuffix: string): string {
-    return path.join(__dirname, `../../../${pathSuffix}`)
+  public static getPath(pathSuffix?: string): string {
+    return path.join(homedir, filesdir, `${pathSuffix || ''}`)
   }
 
   public static delete(folder: Folder, fileName?: string): void {
     const fullPath = fileName ? `${folder.path}/${fileName}` : `${folder.path}/${folder.name}`
     fs.unlinkSync(FilesRepository.getFilePath(fullPath))
+  }
+
+  public static testFolder(folder: Folder): void {
+    this.existsOrCreate()
+    this.existsOrCreate(folder.path)
+  }
+
+  public static existsOrCreate(pathSuffix?: string): void {
+    const folderPath = this.getPath(pathSuffix)
+    if (fs.existsSync(folderPath)) return
+    fs.mkdirSync(folderPath)
   }
 }

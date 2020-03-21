@@ -40,6 +40,11 @@ const wordList = words && words.wordList ? words.wordList : []
 export default class extends Command {
  @metadata
   execute() {
+    if (!wordList.length) {
+      console.info('Nothing to show here!')
+      console.info('run "symbol-cli words add" to add a word')
+      return
+    }
     console.table(wordList)
   }
 }
