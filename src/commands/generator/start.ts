@@ -24,20 +24,14 @@
  */
 // external
 import { command, metadata, Command } from 'clime'
-import { Wallet } from 'symbol-hd-wallets'
 import { NetworkType } from 'symbol-sdk'
 import prompts from 'prompts'
 
 // internal
+import { ExtendedKeyHandler } from '../../services/ExtendedKeyHandler'
 import { ExtendedKeysGenerator } from '../../services/ExtendedKeysGenerator'
-import { Classifier, VanityType } from '../../services/Classifier'
-import { Results } from '../../services/Results'
+import { VanityType } from '../../services/Classifier'
 import { WordFinder } from '../../services/WordFinder'
-import { Match } from '../../model/Match'
-
-import derivationPaths from '../../../assets/paths.json'
-
-const { paths } = derivationPaths
 
 const vanityOptions: VanityType[] = [
   'left',
@@ -130,34 +124,15 @@ export default class extends Command {
           press CTRL+C to stop the process
         `)
         }
-        if (count % 100 === 0) console.info(`${count} derivations performed`)
+        if (count % 250 === 0) console.info(`${count} derivations performed`)
 
-        // get addresses from the extended key
-        const addresses = paths
-          .map((path) => new Wallet(extendedKey.derivePath(path)))
-          .map((wallet) => wallet.getAccount(NetworkType[response.networkType] as any).address)
-
-        // get matches
-        const matches: Match[] = wordFinder.getMatches(addresses.map((address) => address.plain()))
-        if (!matches.length) return
-
-        // get matches vanity types and store files
-        matches.forEach((match: Match) => {
-          const vanityType = Classifier.getVanityType(match)
-
-          if (!chosenVanityTypes.includes(vanityType)) return
-
-          console.info('New match!')
-          console.table({ ...match, vanityType })
-
-          Results.store(
-            extendedKey,
-            mnemonic,
-            addresses,
-            match.word,
-            vanityType,
-          )
-        })
+        ExtendedKeyHandler.handleNewItem(
+          extendedKey,
+          mnemonic,
+          wordFinder,
+          response.networkType,
+          chosenVanityTypes,
+        )
       },
       (error) => console.error(error),
     )
