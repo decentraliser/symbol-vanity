@@ -27,7 +27,7 @@ import { Subject } from 'rxjs'
 import { startWith } from 'rxjs/operators'
 
 // internal
-import { MnemonicPassPhrase, ExtendedKey } from 'symbol-hd-wallets'
+import { MnemonicPassPhrase, ExtendedKey, Network } from 'symbol-hd-wallets'
 import { ExtendedKeysStream } from '../model/ExtendedKeysStream'
 
 export class ExtendedKeysGenerator {
@@ -60,7 +60,7 @@ export class ExtendedKeysGenerator {
         // @TODO: Use a generator to enable killing the process
         while (continueRoutine) {
           const mnemonic = MnemonicPassPhrase.createRandom()
-          const extendedKey = ExtendedKey.createFromSeed(mnemonic.toSeed().toString('hex'))
+          const extendedKey = ExtendedKey.createFromSeed(mnemonic.toSeed().toString('hex'), Network.SYMBOL)
           this.extendedKeys$.next({ mnemonic, extendedKey })
         }
       })

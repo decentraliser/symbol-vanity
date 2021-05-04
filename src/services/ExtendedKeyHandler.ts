@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 import { ExtendedKey, Wallet, MnemonicPassPhrase } from 'symbol-hd-wallets'
-import { NetworkType } from 'symbol-sdk'
+import { Account, NetworkType } from 'symbol-sdk'
 import derivationPaths from '../../assets/paths.json'
 import { Match } from '../model/Match'
 import { Classifier, VanityType } from './Classifier'
@@ -42,7 +42,7 @@ export class ExtendedKeyHandler {
     // get addresses from the extended key
     const addresses = paths
       .map((path) => new Wallet(extendedKey.derivePath(path)))
-      .map((wallet) => wallet.getAccount(NetworkType[networkType] as any).address)
+      .map((wallet) => Account.createFromPrivateKey(wallet.getAccountPrivateKey(), NetworkType[networkType] as any).address)
 
     // get matches
     const matches: Match[] = wordFinder.getMatches(addresses.map((address) => address.plain()))
