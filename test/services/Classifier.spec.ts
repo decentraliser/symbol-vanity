@@ -37,7 +37,7 @@ describe('Classifier', () => {
     ${address} | ${'robl5b'} | ${5}
     ${address} | ${'bsdvni'} | ${6}
     ${address} | ${'z7'} | ${7}
-  `(`#getVanityType({ address: $address, word: $word }) should return "$expected"`, ({ word, expected }) => {
-    expect(Classifier.getVanityType({ address, word })).toBe(expected)
-  });
+  `('#getVanityType({ address: $address, word: $word }) should return "$expected"', ({ word, expected }) => {
+  expect(Classifier.getVanityType({ address, word })).toBe(expected)
+})
 })
