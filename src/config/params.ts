@@ -22,6 +22,6 @@
  * SOFTWARE.
  */
 export const params = {
-  ADDRESS_LENGTH: 40,
+  ADDRESS_LENGTH: 39,
   MIN_WORD_LENGTH: 3,
 }

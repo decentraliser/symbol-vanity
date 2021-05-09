@@ -24,7 +24,7 @@
  */
 import { Match } from '../model/Match'
 
-const ADDRESS_LENGTH = 40
+const ADDRESS_LENGTH = 39
 
 /**
  * Representation of a pretty address chunks
@@ -87,7 +87,6 @@ export class Classifier {
    * @returns {boolean}
    */
   private right(): boolean {
-    const a = this.plainAddress.length
     const rightChunk = this.plainAddress.substring(ADDRESS_LENGTH - this.word.length)
     return rightChunk === this.word
   }
