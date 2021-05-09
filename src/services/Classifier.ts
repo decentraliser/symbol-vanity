@@ -23,8 +23,9 @@
  * SOFTWARE.
  */
 import { Match } from '../model/Match'
+import { params } from '../config/params'
 
-const ADDRESS_LENGTH = 39
+const { ADDRESS_LENGTH } = params
 
 /**
  * Representation of a pretty address chunks
